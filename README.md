@@ -9,7 +9,7 @@
 
 ### Binary
 ```bash
-go install github.com/mheers/docker-image-squash/cmd@latest
+go install github.com/mheers/docker-image-squash@latest
 ```
 
 ## Usage
