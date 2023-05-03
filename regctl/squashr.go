@@ -3,7 +3,6 @@ package regctl
 import (
 	"context"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/mheers/docker-image-squash/helpers"
@@ -14,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Squash(image, outputTar string) error {
+func Squash(image, outputDir string) error {
 	ctx := context.Background()
 	r, err := ref.New(image)
 	if err != nil {
@@ -69,13 +68,8 @@ func Squash(image, outputTar string) error {
 		return err
 	}
 
-	tmpDir, err := os.MkdirTemp("", "regctl-squashr")
-	if err != nil {
-		return err
-	}
-
-	for i := len(layers) - 1; i >= 0; i-- {
-		blob, err := rc.BlobGet(ctx, r, layers[i])
+	for i, layer := range layers {
+		blob, err := rc.BlobGet(ctx, r, layer)
 		if err != nil {
 			return fmt.Errorf("failed pulling layer %d: %w", i, err)
 		}
@@ -88,11 +82,11 @@ func Squash(image, outputTar string) error {
 			return fmt.Errorf("could not get tar reader for layer %d: %w", i, err)
 		}
 
-		if err := helpers.UntarTarReader(tr, tmpDir); err != nil {
+		if err := helpers.UntarTarReader(tr, outputDir); err != nil {
 			return fmt.Errorf("failed squashing layer %d: %w", i, err)
 		}
 
-		return nil
 	}
+
 	return nil
 }

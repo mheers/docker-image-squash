@@ -7,6 +7,6 @@ import (
 )
 
 func TestSquash(t *testing.T) {
-	err := Squash("alpine", "alpine.tar")
+	err := Squash("mheers/test", "test.tar")
 	require.NoError(t, err)
 }

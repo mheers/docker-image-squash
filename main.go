@@ -2,9 +2,8 @@ package main
 
 import (
 	"os"
-	"path"
 
-	"github.com/mheers/docker-image-squash/docker"
+	"github.com/mheers/docker-image-squash/helpers"
 	"github.com/mheers/docker-image-squash/regctl"
 )
 
@@ -16,22 +15,20 @@ func main() {
 	image := os.Args[1]
 	output := os.Args[2]
 
-	tmpDir, err := os.MkdirTemp("", "squash")
+	// create a temporary directory to store the layers
+	tmpDir, err := os.MkdirTemp("", "regctl-squashr")
 	if err != nil {
 		panic(err)
 	}
-
 	defer os.RemoveAll(tmpDir)
 
-	tmpExportFile := path.Join(tmpDir, "export.tar")
-
-	err = docker.Export(image, tmpExportFile)
-	if err != nil {
+	// squash the image
+	if err := regctl.Squash(image, tmpDir); err != nil {
 		panic(err)
 	}
 
-	err = regctl.Squash(tmpExportFile, output)
-	if err != nil {
+	// create the output tarball
+	if err := helpers.Tar(tmpDir, output); err != nil {
 		panic(err)
 	}
 }

@@ -2,24 +2,31 @@
 
 > A simple tool to to squash all layers of a docker image into a single tar file.
 
-## Dependencies
-- docker
-
 ## Installation
 
 ### Binary
+
 ```bash
-apt-get install pkg-config libgpgme-dev libdevmapper-dev libbtrfs-dev
 go install github.com/mheers/docker-image-squash@latest
 ```
 
 ## Usage
+
+### Binary
+
 ```bash
 docker-image-squash <image> <output.tar>
 ```
 
+### Docker
+
+```bash
+docker run --rm -v $(pwd):/output mheers/docker-image-squash <image> <output.tar>
+```
+
 ## TODO
-- [ ] remove dependency of `docker`
+
+- [x] remove dependency of `docker`
 
 
 ## Alternatives
@@ -30,5 +37,6 @@ docker-image-squash <image> <output.tar>
 
 ### Why docker-image-squash?
 
+- no need to install docker
 - no need to install python
 - no need to run as root
