@@ -65,7 +65,16 @@ func Untar(inputTar, outputDir string) error {
 	if err != nil {
 		return err
 	}
-	tr := tar.NewReader(f)
+	defer f.Close()
+	return UntarReader(f, outputDir)
+}
+
+func UntarReader(r io.Reader, outputDir string) error {
+	tr := tar.NewReader(r)
+	return UntarTarReader(tr, outputDir)
+}
+
+func UntarTarReader(tr *tar.Reader, outputDir string) error {
 
 	for {
 		header, err := tr.Next()

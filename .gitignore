@@ -1,3 +1,4 @@
 *.tar
 main
 docker-image-squash
+__debug_bin

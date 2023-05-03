@@ -5,7 +5,7 @@ import (
 	"path"
 
 	"github.com/mheers/docker-image-squash/docker"
-	"github.com/mheers/docker-image-squash/squash"
+	"github.com/mheers/docker-image-squash/regctl"
 )
 
 func main() {
@@ -21,19 +21,16 @@ func main() {
 		panic(err)
 	}
 
-	tmpExportFile := path.Join(tmpDir, "export.tar")
+	defer os.RemoveAll(tmpDir)
 
-	err = docker.Pull(image)
-	if err != nil {
-		panic(err)
-	}
+	tmpExportFile := path.Join(tmpDir, "export.tar")
 
 	err = docker.Export(image, tmpExportFile)
 	if err != nil {
 		panic(err)
 	}
 
-	err = squash.Squash(tmpExportFile, output)
+	err = regctl.Squash(tmpExportFile, output)
 	if err != nil {
 		panic(err)
 	}

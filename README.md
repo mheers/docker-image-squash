@@ -9,6 +9,7 @@
 
 ### Binary
 ```bash
+apt-get install pkg-config libgpgme-dev libdevmapper-dev libbtrfs-dev
 go install github.com/mheers/docker-image-squash@latest
 ```
 
